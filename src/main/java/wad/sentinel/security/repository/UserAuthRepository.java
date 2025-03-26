@@ -14,7 +14,7 @@ public interface UserAuthRepository extends JpaRepository<UserAuth, String> {
 	@Query(value = "SELECT u FROM UserAuth u ")
 	Page<UserAuth> search(Pageable pageable);
 
-	Optional<UserAuth> findByUsername(String usuario);
+	Optional<UserAuth> findByUsuario(String usuario);
 
-	Boolean existsByUsername(String usuario);
+	Boolean existsByUsuario(String usuario);
 }
