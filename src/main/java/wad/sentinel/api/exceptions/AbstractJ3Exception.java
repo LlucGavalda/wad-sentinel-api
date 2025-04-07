@@ -3,14 +3,13 @@ package wad.sentinel.api.exceptions;
 /**
  * Abstract class for all J3Exceptions common elements
  */
-public abstract class AbstractJ3Exception extends RuntimeException{
-	
+public abstract class AbstractJ3Exception extends RuntimeException {
+
 	private static final long serialVersionUID = -7479889156146341850L;
-	
-	
+
 	private int errorCode;
 	private String[] parameters;
-	
+
 	/**
 	 * Constructor with code and message
 	 * 
@@ -39,20 +38,16 @@ public abstract class AbstractJ3Exception extends RuntimeException{
 		return errorCode;
 	}
 
-
 	public void setErrorCode(int errorCode) {
 		this.errorCode = errorCode;
 	}
-
 
 	public String[] getParameters() {
 		return parameters;
 	}
 
-
 	public void setParameters(String[] parameters) {
 		this.parameters = parameters;
 	}
-	
-	
+
 }

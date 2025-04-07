@@ -8,21 +8,20 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 /**
  * 
  * Abstract DTO superclass.
- * It provides with common methods that apply to all subclasses, as well as a common
+ * It provides with common methods that apply to all subclasses, as well as a
+ * common
  * interface.
  *
  */
 public abstract class AbstractDto {
 
-
 	// User that has made a modification
-	private String userModId;
+	private String usuarioAud;
 	// Timestamp of the modification
-	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss", timezone="Europe/Madrid")
-	private Timestamp dateMod;
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Europe/Madrid")
+	private Timestamp fechaAud;
 	private String disponible;
 
-	
 	// Constructors -----------------------------
 
 	/**
@@ -30,32 +29,37 @@ public abstract class AbstractDto {
 	 * No fields are initialised.
 	 */
 	public AbstractDto() {
-		
+
 	}
-	
+
 	/**
-	 * Convenience constructor that initialises itself with the received entity data.
-	 * @param entity	The entity from which the fields Id, Valid, UserModId and DateMod will be initialised.
+	 * Convenience constructor that initialises itself with the received entity
+	 * data.
+	 * 
+	 * @param entity The entity from which the fields Id, Valid, UsuarioAud and
+	 *               FechaAud will be initialised.
 	 */
 	public AbstractDto(AbstractEntity entity) {
 		mapSystemFields(entity);
 		this.disponible = entity.getDisponible();
-		this.userModId = entity.getUserModId();
+		this.usuarioAud = entity.getUsuarioAud();
 
 	}
 
 	// Methods -----------------------------
 
 	/**
-	 * Convenience method to map Id, Valid, UserModId, DateMod.
-	 * @param entity	The entity from which the fields Id, Valid, UserModId and DateMod will be initialised.
+	 * Convenience method to map Id, Valid, UsuarioAud, FechaAud.
+	 * 
+	 * @param entity The entity from which the fields Id, Valid, UsuarioAud and
+	 *               FechaAud will be initialised.
 	 */
 	public void mapSystemFields(AbstractEntity entity) {
 		this.setDisponible(entity.getDisponible());
-		this.setUserModId(entity.getUserModId());
-		this.setDateMod(entity.getDateMod());
+		this.setUsuarioAud(entity.getUsuarioAud());
+		this.setFechaAud(entity.getFechaAud());
 	}
-	
+
 	// Getters and Setters -----------------------------
 
 	public String getDisponible() {
@@ -65,24 +69,22 @@ public abstract class AbstractDto {
 	public void setDisponible(String disponible) {
 		this.disponible = disponible;
 	}
-		
-	public String getUserModId() {
-		return userModId;
+
+	public String getUsuarioAud() {
+		return usuarioAud;
 	}
 
-
-	public void setUserModId(String userModId) {
-		this.userModId = userModId;
+	public void setUsuarioAud(String usuarioAud) {
+		this.usuarioAud = usuarioAud;
 	}
 
-	public Timestamp getDateMod() {
-		return dateMod;
+	public Timestamp getFechaAud() {
+		return fechaAud;
 	}
 
-	public void setDateMod(Timestamp dateMod) {
-		this.dateMod = dateMod;
+	public void setFechaAud(Timestamp fechaAud) {
+		this.fechaAud = fechaAud;
 	}
-
 
 	public abstract AbstractEntity mapEntity();
 }

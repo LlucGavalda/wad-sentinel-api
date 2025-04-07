@@ -8,12 +8,11 @@ import jakarta.persistence.Table;
 import wad.sentinel.api.dto.ServidorDto;
 import jakarta.persistence.Id;
 
-
 @Entity
 @Table(name = "ws_servidores")
 
 public class Servidor extends AbstractEntity {
-	
+
 	private static final long serialVersionUID = 1132811703611564522L;
 
 	public static final String cacheName = "ServidorCache";
@@ -21,7 +20,7 @@ public class Servidor extends AbstractEntity {
 	// DB Id
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id_servidor")
+	@Column(name = "id_servidor")
 	protected Long id;
 	@Column(name = "servidor", length = 50, nullable = false)
 	private String servidor;
@@ -46,12 +45,12 @@ public class Servidor extends AbstractEntity {
 	public ServidorDto mapDto() {
 		return new ServidorDto(this);
 	}
-	
+
 	public void updateFrom(ServidorDto dto) {
 		super.updateFrom(dto);
 		this.servidor = dto.getServidor();
 		this.host = dto.getHost();
-		}
+	}
 
 	// Getters and Setters -----------------------------
 
@@ -62,11 +61,10 @@ public class Servidor extends AbstractEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public String getServidor() {
 		return servidor;
 	}
-
 
 	public void setServidor(String servidor) {
 		this.servidor = servidor;
@@ -79,5 +77,5 @@ public class Servidor extends AbstractEntity {
 	public void setHost(String host) {
 		this.host = host;
 	}
-	
+
 }

@@ -3,7 +3,6 @@ package wad.sentinel.api.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import wad.sentinel.api.dto.AbstractDto;
@@ -11,7 +10,8 @@ import wad.sentinel.api.dto.AbstractDto;
 /**
  * 
  * Abstract Entity superclass.
- * It provides convenience methods and constructors, a common interface for all the entities
+ * It provides convenience methods and constructors, a common interface for all
+ * the entities
  * and common methods.
  *
  */
@@ -19,19 +19,19 @@ import wad.sentinel.api.dto.AbstractDto;
 public abstract class AbstractEntity implements Serializable {
 
 	private static final long serialVersionUID = 8658231246277532919L;
-	
+
 	// Registry is valid or, otherwise, deleted/invalidated.
 	@Column(name = "disponible", length = 1, nullable = false)
 	private String disponible = "S";
-	
+
 	// User that has made a modification
-	@Column(name="id_usuario_aud", length=30, nullable=false)
-	protected String userModId;
+	@Column(name = "id_usuario_aud", length = 30, nullable = false)
+	protected String usuarioAud;
 
 	// Timestamp of the modification
-	@Column(name="fecha_aud", nullable=false)
-	protected Timestamp dateMod;
-	
+	@Column(name = "fecha_aud", nullable = false)
+	protected Timestamp fechaAud;
+
 	// Constructors -----------------------------
 
 	/**
@@ -41,10 +41,12 @@ public abstract class AbstractEntity implements Serializable {
 	public AbstractEntity() {
 
 	}
-	
+
 	/**
 	 * Convenience constructor that initialises itself with the received dto data.
-	 * @param dto	The dto from which the fields Id, Valid, UserModId and DateMod will be initialisec.
+	 * 
+	 * @param dto The dto from which the fields Id, Valid, UsuarioAud and FechaAud
+	 *            will be initialisec.
 	 */
 	public AbstractEntity(AbstractDto dto) {
 		mapSystemFields(dto);
@@ -54,22 +56,24 @@ public abstract class AbstractEntity implements Serializable {
 
 	/**
 	 * Convenience method that initialises itself with the received dto data.
-	 * @param dto	The dto from which the fields Id, Valid, UserModId and DateMod will be initialisec.
+	 * 
+	 * @param dto The dto from which the fields Id, Valid, UsuarioAud and FechaAud
+	 *            will be initialisec.
 	 */
 	public void mapSystemFields(AbstractDto dto) {
 		this.setDisponible(dto.getDisponible());
-		this.setUserModId(dto.getUserModId());
-		this.setDateMod(dto.getDateMod());
+		this.setUsuarioAud(dto.getUsuarioAud());
+		this.setFechaAud(dto.getFechaAud());
 	}
 
 	/**
 	 * Prepares the entity to be saved, by setting:
-	 * - DateMod
-	 * - UserModId
+	 * - FechaAud
+	 * - UsuarioAud
 	 */
 	public void prepareToSave() {
-	    // Guardar
-	    this.setDateMod(new Timestamp(System.currentTimeMillis()));
+		// Guardar
+		this.setFechaAud(new Timestamp(System.currentTimeMillis()));
 	}
 
 	/**
@@ -80,7 +84,7 @@ public abstract class AbstractEntity implements Serializable {
 	public void setTransientFrom(AbstractDto dto) {
 		// Nothing to do here
 	}
-	
+
 	/**
 	 * Updates self fields with Dto fields
 	 * 
@@ -88,16 +92,16 @@ public abstract class AbstractEntity implements Serializable {
 	 */
 	public void updateFrom(AbstractDto dto) {
 		this.disponible = dto.getDisponible();
-		this.userModId = dto.getUserModId();
+		this.usuarioAud = dto.getUsuarioAud();
 	}
-	
+
 	/**
 	 * Returns a DTO corresponding to this entity
 	 * 
 	 * @return
 	 */
 	public abstract AbstractDto mapDto();
-	
+
 	// Getters and Setters -----------------------------
 
 	public String getDisponible() {
@@ -108,20 +112,20 @@ public abstract class AbstractEntity implements Serializable {
 		this.disponible = disponible;
 	}
 
-	public String getUserModId() {
-		return userModId;
+	public String getUsuarioAud() {
+		return usuarioAud;
 	}
 
-	public void setUserModId(String userModId) {
-		this.userModId = userModId;
+	public void setUsuarioAud(String usuarioAud) {
+		this.usuarioAud = usuarioAud;
 	}
 
-	public Timestamp getDateMod() {
-		return dateMod;
+	public Timestamp getFechaAud() {
+		return fechaAud;
 	}
 
-	public void setDateMod(Timestamp dateMod) {
-		this.dateMod = dateMod;
+	public void setFechaAud(Timestamp fechaAud) {
+		this.fechaAud = fechaAud;
 	}
 
 }
