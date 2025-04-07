@@ -22,7 +22,7 @@ public abstract class AbstractEntity implements Serializable {
 
 	// Registry is valid or, otherwise, deleted/invalidated.
 	@Column(name = "disponible", length = 1, nullable = false)
-	private String disponible = "S";
+	protected String disponible = "S";
 
 	// User that has made a modification
 	@Column(name = "id_usuario_aud", length = 30, nullable = false)
@@ -72,7 +72,6 @@ public abstract class AbstractEntity implements Serializable {
 	 * - UsuarioAud
 	 */
 	public void prepareToSave() {
-		// Guardar
 		this.setFechaAud(new Timestamp(System.currentTimeMillis()));
 	}
 

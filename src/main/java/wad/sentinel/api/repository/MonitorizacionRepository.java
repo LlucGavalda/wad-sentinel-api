@@ -7,13 +7,14 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import wad.sentinel.api.entity.Servidor;
+import wad.sentinel.api.entity.Monitorizacion;
 
-public interface ServidorRepository extends JpaRepository<Servidor, Long>, JpaSpecificationExecutor<Servidor> {
+public interface MonitorizacionRepository
+		extends JpaRepository<Monitorizacion, Long>, JpaSpecificationExecutor<Monitorizacion> {
 
 	@SuppressWarnings("null")
-	@Query(value = "SELECT t FROM Servidor t "
+	@Query(value = "SELECT t FROM Monitorizacion t "
 			+ "WHERE t.id = :id ")
-	Optional<Servidor> findById(@Param("id") Long id);
+	Optional<Monitorizacion> findById(@Param("id") Long id);
 
 }
