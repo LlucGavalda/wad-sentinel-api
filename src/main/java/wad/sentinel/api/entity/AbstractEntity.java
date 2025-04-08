@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import wad.sentinel.api.dto.AbstractDto;
+import wad.sentinel.authentication.utils.SecurityUtils;
 
 /**
  * 
@@ -21,8 +22,8 @@ public abstract class AbstractEntity implements Serializable {
 	private static final long serialVersionUID = 8658231246277532919L;
 
 	// Registry is valid or, otherwise, deleted/invalidated.
-	@Column(name = "disponible", length = 1, nullable = false)
-	protected String disponible = "S";
+	@Column(name = "incidencia", length = 1, nullable = false)
+	protected String incidencia = "S";
 
 	// User that has made a modification
 	@Column(name = "id_usuario_aud", length = 30, nullable = false)
@@ -61,7 +62,7 @@ public abstract class AbstractEntity implements Serializable {
 	 *            will be initialisec.
 	 */
 	public void mapSystemFields(AbstractDto dto) {
-		this.setDisponible(dto.getDisponible());
+		this.setIncidencia(dto.getIncidencia());
 		this.setUsuarioAud(dto.getUsuarioAud());
 		this.setFechaAud(dto.getFechaAud());
 	}
@@ -73,6 +74,8 @@ public abstract class AbstractEntity implements Serializable {
 	 */
 	public void prepareToSave() {
 		this.setFechaAud(new Timestamp(System.currentTimeMillis()));
+		this.setUsuarioAud(SecurityUtils.getUserName());
+
 	}
 
 	/**
@@ -90,7 +93,7 @@ public abstract class AbstractEntity implements Serializable {
 	 * @param dto The dto from which take the data
 	 */
 	public void updateFrom(AbstractDto dto) {
-		this.disponible = dto.getDisponible();
+		this.incidencia = dto.getIncidencia();
 		this.usuarioAud = dto.getUsuarioAud();
 	}
 
@@ -103,12 +106,12 @@ public abstract class AbstractEntity implements Serializable {
 
 	// Getters and Setters -----------------------------
 
-	public String getDisponible() {
-		return disponible;
+	public String getIncidencia() {
+		return incidencia;
 	}
 
-	public void setDisponible(String disponible) {
-		this.disponible = disponible;
+	public void setIncidencia(String incidencia) {
+		this.incidencia = incidencia;
 	}
 
 	public String getUsuarioAud() {

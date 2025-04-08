@@ -3,10 +3,12 @@ package wad.sentinel.api.entity;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,11 +40,11 @@ public class Monitorizacion extends AbstractEntity {
 	private Timestamp fecha;
 
 	@JoinTable(name = "ws_servidores_monitorizaciones_puertos", joinColumns = @JoinColumn(name = "id_monitorizacion"), inverseJoinColumns = @JoinColumn(name = "id_monitorizacion_puerto"))
-	@OneToMany(cascade = { CascadeType.ALL })
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	private Set<MonitorizacionPuerto> puertos = Collections.<MonitorizacionPuerto>emptySet();
 
 	@JoinTable(name = "ws_servidores_monitorizaciones_discos", joinColumns = @JoinColumn(name = "id_monitorizacion"), inverseJoinColumns = @JoinColumn(name = "id_monitorizacion_disco"))
-	@OneToMany(cascade = { CascadeType.ALL })
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	private Set<MonitorizacionDisco> discos = Collections.<MonitorizacionDisco>emptySet();
 
 	@OneToOne
@@ -54,7 +56,7 @@ public class Monitorizacion extends AbstractEntity {
 	private MonitorizacionProcesador procesador;
 
 	@JoinTable(name = "ws_servidores_monitorizaciones_temperatura", joinColumns = @JoinColumn(name = "id_monitorizacion"), inverseJoinColumns = @JoinColumn(name = "id_monitorizacion_temperatura"))
-	@OneToMany(cascade = { CascadeType.ALL })
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	private Set<MonitorizacionTemperatura> temperaturas = Collections.<MonitorizacionTemperatura>emptySet();
 
 	// Constructors -----------------------------
@@ -65,12 +67,8 @@ public class Monitorizacion extends AbstractEntity {
 
 	public Monitorizacion(MonitorizacionDto dto) {
 		super(dto);
-		this.id = dto.getId();
-		this.servidor = dto.getServidor();
-		this.fecha = dto.getFecha();
-		// if (dto.getDisponible() != null) {
-		// this.disponible = dto.getDisponible();
-		// }
+		updateFrom(dto);
+
 	}
 
 	// Methods -----------------------------
@@ -83,6 +81,23 @@ public class Monitorizacion extends AbstractEntity {
 		super.updateFrom(dto);
 		this.servidor = dto.getServidor();
 		this.fecha = dto.getFecha();
+		if (dto.getPuertos() != null && !dto.getPuertos().isEmpty()) {
+			this.puertos = dto.getPuertos().stream().map(MonitorizacionPuerto::new).collect(Collectors.toSet());
+		}
+		if (dto.getDiscos() != null && !dto.getDiscos().isEmpty()) {
+			this.discos = dto.getDiscos().stream().map(MonitorizacionDisco::new).collect(Collectors.toSet());
+		}
+		if (dto.getMemoria() != null) {
+			this.memoria = new MonitorizacionMemoria(dto.getMemoria());
+		}
+		if (dto.getProcesador() != null) {
+			this.procesador = new MonitorizacionProcesador(dto.getProcesador());
+		}
+		if (dto.getTemperaturas() != null && !dto.getTemperaturas().isEmpty()) {
+			this.temperaturas = dto.getTemperaturas().stream()
+					.map(MonitorizacionTemperatura::new)
+					.collect(Collectors.toSet());
+		}
 	}
 
 	// Getters and Setters -----------------------------

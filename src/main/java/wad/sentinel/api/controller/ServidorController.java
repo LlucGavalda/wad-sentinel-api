@@ -30,8 +30,8 @@ public class ServidorController {
      * @return
      */
     @GetMapping("/list")
-    public List<ServidorDto> list(@RequestParam(required = false) String disponible) {
-        return servidorService.list(disponible);
+    public List<ServidorDto> list(@RequestParam(required = false) String incidencia) {
+        return servidorService.list(incidencia);
     }
 
     /**
@@ -42,8 +42,7 @@ public class ServidorController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<?> get(
-            @PathVariable Long id
-            ){
+            @PathVariable Long id) {
         ServidorDto servidorDto = servidorService.get(id);
         return ResponseEntity.ok(servidorDto);
     }
@@ -56,8 +55,7 @@ public class ServidorController {
      */
     @PostMapping("/")
     public ResponseEntity<?> create(
-            @RequestBody ServidorDto servidorDto
-            ){
+            @RequestBody ServidorDto servidorDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(servidorService.create(servidorDto));
     }
 
@@ -71,8 +69,7 @@ public class ServidorController {
     @PutMapping("/{id}")
     public ResponseEntity<?> modify(
             @RequestBody ServidorDto servidorDto,
-            @PathVariable Long id
-            ){
+            @PathVariable Long id) {
         servidorDto.setId(id);
         return ResponseEntity.status(HttpStatus.OK).body(servidorService.modify(servidorDto));
     }

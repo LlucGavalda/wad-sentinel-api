@@ -16,8 +16,7 @@ public class MonitorizacionDisco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_monitorizacion_disco")
-
-    private Long id;
+    protected Long id;
 
     @Column(name = "total", length = 45, nullable = false)
     private String total;

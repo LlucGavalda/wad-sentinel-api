@@ -2,8 +2,11 @@ package wad.sentinel.api.dto;
 
 import java.sql.Timestamp;
 
-import wad.sentinel.api.entity.AbstractEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import wad.sentinel.api.entity.AbstractEntity;
+
+import wad.sentinel.api.Constants;
 
 /**
  * 
@@ -18,9 +21,9 @@ public abstract class AbstractDto {
 	// User that has made a modification
 	private String usuarioAud;
 	// Timestamp of the modification
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Europe/Madrid")
+	@JsonFormat(pattern = Constants.JSON_FORMAT_DATETIME, timezone = Constants.JSON_FORMAT_DATETIME_TIMEZONE)
 	private Timestamp fechaAud;
-	private String disponible;
+	private String incidencia;
 
 	// Constructors -----------------------------
 
@@ -41,7 +44,7 @@ public abstract class AbstractDto {
 	 */
 	public AbstractDto(AbstractEntity entity) {
 		mapSystemFields(entity);
-		this.disponible = entity.getDisponible();
+		this.incidencia = entity.getIncidencia();
 		this.usuarioAud = entity.getUsuarioAud();
 
 	}
@@ -55,19 +58,19 @@ public abstract class AbstractDto {
 	 *               FechaAud will be initialised.
 	 */
 	public void mapSystemFields(AbstractEntity entity) {
-		this.setDisponible(entity.getDisponible());
+		this.setIncidencia(entity.getIncidencia());
 		this.setUsuarioAud(entity.getUsuarioAud());
 		this.setFechaAud(entity.getFechaAud());
 	}
 
 	// Getters and Setters -----------------------------
 
-	public String getDisponible() {
-		return disponible;
+	public String getIncidencia() {
+		return incidencia;
 	}
 
-	public void setDisponible(String disponible) {
-		this.disponible = disponible;
+	public void setIncidencia(String incidencia) {
+		this.incidencia = incidencia;
 	}
 
 	public String getUsuarioAud() {

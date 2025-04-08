@@ -1,6 +1,5 @@
 package wad.sentinel.api.service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,54 +16,47 @@ import wad.sentinel.api.repository.ServidorRepository;
 
 @Service
 public class ServidorServiceImpl implements ServidorService {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(ServidorServiceImpl.class);
 
 	@Autowired
 	private ServidorRepository entityRepository;
-	
+
 	@Override
-	public List<ServidorDto> list(String disponible) {
-	    logger.info("[Start] list...");
-	    try {
-	        // Obtenim tots els servidors des de la base de dades
-	        List<Servidor> servidors = entityRepository.findAll();
-	        
-	        // Filtrar per disponible si no és null
-	        if (disponible != null) {
-	            logger.debug("Filtrando por disponible: {}", disponible);
-	            servidors = servidors.stream()
-	                .filter(servidor -> {
-	                    logger.debug("Servidor disponible: {}", servidor.getDisponible());
-	                    return disponible.equalsIgnoreCase(servidor.getDisponible());
-	                })
-	                .collect(Collectors.toList());
-	        }
+	public List<ServidorDto> list(String incidencia) {
+		logger.info("[Start] list...");
+		List<Servidor> servidors = entityRepository.findAll();
 
-	        // Convertim la llista d'entitats a una llista de DTOs utilitzant el mètode mapDto() de la classe Servidor
-	        List<ServidorDto> servidorDto = servidors.stream()
-	            .map(Servidor::mapDto)  // Utilitzem el mètode mapDto() de Servidor per convertir l'entitat en DTO
-	            .collect(Collectors.toList());
+		// Filtrar per incidencia si no és null
+		if (incidencia != null) {
+			logger.debug("Filtrando por incidencia: {}", incidencia);
+			servidors = servidors.stream()
+					.filter(servidor -> {
+						logger.debug("Servidor incidencia: {}", servidor.getIncidencia());
+						return incidencia.equalsIgnoreCase(servidor.getIncidencia());
+					})
+					.collect(Collectors.toList());
+		}
 
-	        logger.info("[End] list.");
-	        return servidorDto;
+		// Convertim la llista d'entitats a una llista de DTOs utilitzant el mètode
+		// mapDto() de la classe Servidor
+		List<ServidorDto> servidorDto = servidors.stream()
+				.map(Servidor::mapDto) // Utilitzem el mètode mapDto() de Servidor per convertir l'entitat en DTO
+				.collect(Collectors.toList());
 
-	    } catch (Exception e) {
-	        logger.error("Error al obtenir la llista de servidors", e);
-	        return Collections.emptyList();  // Retornem una llista buida en cas d'error
-	    }
+		logger.info("[End] list.");
+		return servidorDto;
 	}
-
 
 	@Override
 	public ServidorDto get(Long id) {
 		logger.info("[Start] get...");
-		
+
 		Optional<Servidor> existing = entityRepository.findById(id);
-		if(!existing.isPresent()) {
-			throw new J3NotFoundException("Servidor", "id", String.valueOf(id)); 
+		if (!existing.isPresent()) {
+			throw new J3NotFoundException("Servidor", "id", String.valueOf(id));
 		}
-		
+
 		logger.info("[End] get.");
 
 		return existing.get().mapDto();
@@ -72,33 +64,33 @@ public class ServidorServiceImpl implements ServidorService {
 
 	@Override
 	public ServidorDto create(ServidorDto dto) {
-	    logger.info("[Start] create...");
+		logger.info("[Start] create...");
 
-	    // Crear entidad y obtener su Id
-	    Servidor entity = dto.mapEntity();
-	    entity.mapSystemFields(dto); // Mapear campos del DTO a la entidad
-	    entity.prepareToSave();
-	    Servidor saved = entityRepository.save(entity);
+		// Crear entidad y obtener su Id
+		Servidor entity = dto.mapEntity();
+		entity.mapSystemFields(dto); // Mapear campos del DTO a la entidad
+		entity.prepareToSave();
+		Servidor saved = entityRepository.save(entity);
 
-	    logger.info("[End] create.");
-	    return saved.mapDto();
+		logger.info("[End] create.");
+		return saved.mapDto();
 	}
 
 	@Override
 	public ServidorDto modify(ServidorDto dto) {
-	    logger.info("[Start] modify...");
+		logger.info("[Start] modify...");
 
-	    Servidor entity = entityRepository.findById(dto.getId())
-	            .orElseThrow(() -> new J3NotFoundException("Servidor", "id", String.valueOf(dto.getId())));
+		Servidor entity = entityRepository.findById(dto.getId())
+				.orElseThrow(() -> new J3NotFoundException("Servidor", "id", String.valueOf(dto.getId())));
 
-	    // Actualizar entidad con datos del DTO
-	    entity.updateFrom(dto);
-	    entity.mapSystemFields(dto); // Mapear campos del DTO a la entidad
-	    entity.prepareToSave();
-	    Servidor updated = entityRepository.save(entity);
+		// Actualizar entidad con datos del DTO
+		entity.updateFrom(dto);
+		entity.mapSystemFields(dto); // Mapear campos del DTO a la entidad
+		entity.prepareToSave();
+		Servidor updated = entityRepository.save(entity);
 
-	    logger.info("[End] modify.");
-	    return updated.mapDto();
+		logger.info("[End] modify.");
+		return updated.mapDto();
 	}
 
 }

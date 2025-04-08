@@ -1,7 +1,12 @@
 package wad.sentinel.api.dto;
 
 import java.sql.Timestamp;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import wad.sentinel.api.Constants;
 import wad.sentinel.api.entity.Monitorizacion;
 import wad.sentinel.api.entity.Servidor;
 
@@ -9,13 +14,14 @@ public class MonitorizacionDto extends AbstractDto {
 
 	private Long id;
 	private Servidor servidor;
+	@JsonFormat(pattern = Constants.JSON_FORMAT_DATETIME, timezone = Constants.JSON_FORMAT_DATETIME_TIMEZONE)
 	private Timestamp fecha;
 
-	public MonitorizacionPuertoDto[] puertos;
-	public MonitorizacionDiscoDto[] discos;
-	public MonitorizacionMemoriaDto memoria;
-	public MonitorizacionProcesadorDto procesador;
-	public MonitorizacionTemperaturaDto[] temperatura;
+	private Set<MonitorizacionPuertoDto> puertos;
+	private Set<MonitorizacionDiscoDto> discos;
+	private MonitorizacionMemoriaDto memoria;
+	private MonitorizacionProcesadorDto procesador;
+	private Set<MonitorizacionTemperaturaDto> temperaturas;
 
 	// Constructors -----------------------------
 
@@ -28,11 +34,23 @@ public class MonitorizacionDto extends AbstractDto {
 		this.id = entity.getId();
 		this.servidor = entity.getServidor();
 		this.fecha = entity.getFecha();
-		// this.puertos = entity.getPuertos();
-		// this.discos = entity.getDiscos();
-		// this.memoria = entity.getMemoria();
-		// this.procesador = entity.getProcesador();
-		// this.temperatura = entity.getTemperatura();
+		if (entity.getPuertos() != null && !entity.getPuertos().isEmpty()) {
+			this.puertos = entity.getPuertos().stream().map(MonitorizacionPuertoDto::new).collect(Collectors.toSet());
+		}
+		if (entity.getDiscos() != null && !entity.getDiscos().isEmpty()) {
+			this.discos = entity.getDiscos().stream().map(MonitorizacionDiscoDto::new).collect(Collectors.toSet());
+		}
+		if (entity.getMemoria() != null) {
+			this.memoria = new MonitorizacionMemoriaDto(entity.getMemoria());
+		}
+		if (entity.getProcesador() != null) {
+			this.procesador = new MonitorizacionProcesadorDto(entity.getProcesador());
+		}
+		if (entity.getTemperaturas() != null && !entity.getTemperaturas().isEmpty()) {
+			this.temperaturas = entity.getTemperaturas().stream()
+					.map(MonitorizacionTemperaturaDto::new)
+					.collect(Collectors.toSet());
+		}
 	}
 
 	// Methods -----------------------------
@@ -67,19 +85,19 @@ public class MonitorizacionDto extends AbstractDto {
 		this.fecha = fecha;
 	}
 
-	public MonitorizacionPuertoDto[] getPuertos() {
+	public Set<MonitorizacionPuertoDto> getPuertos() {
 		return puertos;
 	}
 
-	public void setPuertos(MonitorizacionPuertoDto[] puertos) {
+	public void setPuertos(Set<MonitorizacionPuertoDto> puertos) {
 		this.puertos = puertos;
 	}
 
-	public MonitorizacionDiscoDto[] getDiscos() {
+	public Set<MonitorizacionDiscoDto> getDiscos() {
 		return discos;
 	}
 
-	public void setDiscos(MonitorizacionDiscoDto[] discos) {
+	public void setDiscos(Set<MonitorizacionDiscoDto> discos) {
 		this.discos = discos;
 	}
 
@@ -99,12 +117,12 @@ public class MonitorizacionDto extends AbstractDto {
 		this.procesador = procesador;
 	}
 
-	public MonitorizacionTemperaturaDto[] getTemperatura() {
-		return temperatura;
+	public Set<MonitorizacionTemperaturaDto> getTemperaturas() {
+		return temperaturas;
 	}
 
-	public void setTemperatura(MonitorizacionTemperaturaDto[] temperatura) {
-		this.temperatura = temperatura;
+	public void setTemperaturas(Set<MonitorizacionTemperaturaDto> temperaturas) {
+		this.temperaturas = temperaturas;
 	}
 
 }
