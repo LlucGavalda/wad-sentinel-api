@@ -1,5 +1,6 @@
 package wad.sentinel.api.controller;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,13 @@ public class MonitorizacionController {
      */
     // TODO filtrar per disponible,incidencia, fecha y id_Servidor_fk
     @GetMapping("/list")
-    public List<MonitorizacionDto> list(@RequestParam(required = false) Boolean disponible) {
-        return monitorizacionService.list(disponible);
+    public List<MonitorizacionDto> list(
+            @RequestParam(required = false) Boolean disponible,
+            @RequestParam(required = false) Boolean incidencia,
+            @RequestParam(required = false) Timestamp fechaDesde,
+            @RequestParam(required = false) Timestamp fechaHasta,
+            @RequestParam(required = false) Long idServidor) {
+        return monitorizacionService.list(disponible, incidencia, fechaDesde, fechaHasta, idServidor);
     }
 
     /**

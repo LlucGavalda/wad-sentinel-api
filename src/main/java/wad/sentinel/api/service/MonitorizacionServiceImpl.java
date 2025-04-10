@@ -1,5 +1,6 @@
 package wad.sentinel.api.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,19 +36,11 @@ public class MonitorizacionServiceImpl implements MonitorizacionService {
 	private MonitorizacionProcesadorRepository procesadorRepository;
 
 	@Override
-	public List<MonitorizacionDto> list(Boolean disponible) {
+	public List<MonitorizacionDto> list(Boolean disponible, Boolean incidencia, Timestamp fechaDesde,
+			Timestamp fechaHasta, Long idServidor) {
 		logger.info("[Start] list...");
-		List<Monitorizacion> monitorizaciones = entityRepository.findAll();
-
-		// Filtrar per disponible si no és null
-		if (disponible != null) {
-			monitorizaciones = monitorizaciones.stream()
-					.filter(monitorizacion -> {
-						return String.valueOf(disponible)
-								.equalsIgnoreCase(String.valueOf(monitorizacion.getDisponible()));
-					})
-					.collect(Collectors.toList());
-		}
+		List<Monitorizacion> monitorizaciones = entityRepository.list(disponible, incidencia, fechaDesde, fechaHasta,
+				idServidor);
 
 		// Convertim la llista d'entitats a una llista de DTOs utilitzant el mètode
 		// mapDto() de la classe Monitorizacion
