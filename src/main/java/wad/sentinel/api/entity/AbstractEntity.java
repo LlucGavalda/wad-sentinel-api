@@ -22,8 +22,8 @@ public abstract class AbstractEntity implements Serializable {
 	private static final long serialVersionUID = 8658231246277532919L;
 
 	// Registry is valid or, otherwise, deleted/invalidated.
-	@Column(name = "incidencia", length = 1, nullable = false)
-	protected String incidencia = "S";
+	@Column(name = "disponible", nullable = false)
+	protected Boolean disponible = true;
 
 	// User that has made a modification
 	@Column(name = "id_usuario_aud", length = 30, nullable = false)
@@ -62,7 +62,7 @@ public abstract class AbstractEntity implements Serializable {
 	 *            will be initialisec.
 	 */
 	public void mapSystemFields(AbstractDto dto) {
-		this.setIncidencia(dto.getIncidencia());
+		this.setDisponible(dto.getDisponible());
 		this.setUsuarioAud(dto.getUsuarioAud());
 		this.setFechaAud(dto.getFechaAud());
 	}
@@ -93,7 +93,7 @@ public abstract class AbstractEntity implements Serializable {
 	 * @param dto The dto from which take the data
 	 */
 	public void updateFrom(AbstractDto dto) {
-		this.incidencia = dto.getIncidencia();
+		this.disponible = dto.getDisponible();
 		this.usuarioAud = dto.getUsuarioAud();
 	}
 
@@ -106,12 +106,12 @@ public abstract class AbstractEntity implements Serializable {
 
 	// Getters and Setters -----------------------------
 
-	public String getIncidencia() {
-		return incidencia;
+	public Boolean getDisponible() {
+		return disponible;
 	}
 
-	public void setIncidencia(String incidencia) {
-		this.incidencia = incidencia;
+	public void setDisponible(Boolean disponible) {
+		this.disponible = disponible;
 	}
 
 	public String getUsuarioAud() {

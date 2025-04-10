@@ -35,17 +35,16 @@ public class MonitorizacionServiceImpl implements MonitorizacionService {
 	private MonitorizacionProcesadorRepository procesadorRepository;
 
 	@Override
-	public List<MonitorizacionDto> list(String incidencia) {
+	public List<MonitorizacionDto> list(Boolean disponible) {
 		logger.info("[Start] list...");
 		List<Monitorizacion> monitorizaciones = entityRepository.findAll();
 
-		// Filtrar per incidencia si no és null
-		if (incidencia != null) {
-			logger.debug("Filtrando por incidencia: {}", incidencia);
+		// Filtrar per disponible si no és null
+		if (disponible != null) {
 			monitorizaciones = monitorizaciones.stream()
 					.filter(monitorizacion -> {
-						logger.debug("Monitorizacion incidencia: {}", monitorizacion.getIncidencia());
-						return incidencia.equalsIgnoreCase(monitorizacion.getIncidencia());
+						return String.valueOf(disponible)
+								.equalsIgnoreCase(String.valueOf(monitorizacion.getDisponible()));
 					})
 					.collect(Collectors.toList());
 		}

@@ -36,6 +36,9 @@ public class Monitorizacion extends AbstractEntity {
 	@JoinColumn(name = "id_servidor_fk", nullable = false)
 	private Servidor servidor;
 
+	@Column(name = "incidencia", nullable = false)
+	private Boolean incidencia;
+
 	@Column(name = "fecha", nullable = false)
 	private Timestamp fecha;
 
@@ -80,6 +83,7 @@ public class Monitorizacion extends AbstractEntity {
 	public void updateFrom(MonitorizacionDto dto) {
 		super.updateFrom(dto);
 		this.servidor = dto.getServidor();
+		this.incidencia = dto.getIncidencia();
 		this.fecha = dto.getFecha();
 		if (dto.getPuertos() != null && !dto.getPuertos().isEmpty()) {
 			this.puertos = dto.getPuertos().stream().map(MonitorizacionPuerto::new).collect(Collectors.toSet());
@@ -116,6 +120,14 @@ public class Monitorizacion extends AbstractEntity {
 
 	public void setServidor(Servidor servidor) {
 		this.servidor = servidor;
+	}
+
+	public Boolean getIncidencia() {
+		return incidencia;
+	}
+
+	public void setIncidencia(Boolean incidencia) {
+		this.incidencia = incidencia;
 	}
 
 	public Timestamp getFecha() {

@@ -6,7 +6,7 @@ import wad.sentinel.api.dto.MonitorizacionDto;
 
 public interface MonitorizacionService {
 
-	public List<MonitorizacionDto> list(String incidencia);
+	public List<MonitorizacionDto> list(Boolean disponible);
 
 	public MonitorizacionDto get(Long id);
 

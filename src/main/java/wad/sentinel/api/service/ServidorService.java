@@ -6,7 +6,7 @@ import wad.sentinel.api.dto.ServidorDto;
 
 public interface ServidorService {
 
-	public List<ServidorDto> list(String incidencia);
+	public List<ServidorDto> list(Boolean disponible);
 
 	public ServidorDto get(Long id);
 

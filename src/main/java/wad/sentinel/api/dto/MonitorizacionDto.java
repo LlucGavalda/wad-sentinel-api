@@ -14,6 +14,7 @@ public class MonitorizacionDto extends AbstractDto {
 
 	private Long id;
 	private Servidor servidor;
+	private Boolean incidencia;
 	@JsonFormat(pattern = Constants.JSON_FORMAT_DATETIME, timezone = Constants.JSON_FORMAT_DATETIME_TIMEZONE)
 	private Timestamp fecha;
 
@@ -33,6 +34,7 @@ public class MonitorizacionDto extends AbstractDto {
 		super(entity);
 		this.id = entity.getId();
 		this.servidor = entity.getServidor();
+		this.incidencia = entity.getIncidencia();
 		this.fecha = entity.getFecha();
 		if (entity.getPuertos() != null && !entity.getPuertos().isEmpty()) {
 			this.puertos = entity.getPuertos().stream().map(MonitorizacionPuertoDto::new).collect(Collectors.toSet());
@@ -75,6 +77,14 @@ public class MonitorizacionDto extends AbstractDto {
 
 	public void setServidor(Servidor servidor) {
 		this.servidor = servidor;
+	}
+
+	public Boolean getIncidencia() {
+		return incidencia;
+	}
+
+	public void setIncidencia(Boolean incidencia) {
+		this.incidencia = incidencia;
 	}
 
 	public Timestamp getFecha() {

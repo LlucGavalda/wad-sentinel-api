@@ -8,7 +8,7 @@ public class MonitorizacionPuertoDto {
 
     public String puerto = "";
 
-    public String activo;
+    public Boolean activo;
 
     // Constructors -----------------------------
 
@@ -51,11 +51,11 @@ public class MonitorizacionPuertoDto {
         this.puerto = puerto;
     }
 
-    public String getActivo() {
+    public Boolean getActivo() {
         return activo;
     }
 
-    public void setActivo(String activo) {
+    public void setActivo(Boolean activo) {
         this.activo = activo;
     }
 

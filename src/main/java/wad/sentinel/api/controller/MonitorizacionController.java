@@ -28,10 +28,10 @@ public class MonitorizacionController {
      * 
      * @return
      */
-    // TODO filtrar per incidencia, fecha y id_Servidor_fk
+    // TODO filtrar per disponible,incidencia, fecha y id_Servidor_fk
     @GetMapping("/list")
-    public List<MonitorizacionDto> list(@RequestParam(required = false) String incidencia) {
-        return monitorizacionService.list(incidencia);
+    public List<MonitorizacionDto> list(@RequestParam(required = false) Boolean disponible) {
+        return monitorizacionService.list(disponible);
     }
 
     /**

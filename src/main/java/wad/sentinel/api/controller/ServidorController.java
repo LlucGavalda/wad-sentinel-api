@@ -30,8 +30,8 @@ public class ServidorController {
      * @return
      */
     @GetMapping("/list")
-    public List<ServidorDto> list(@RequestParam(required = false) String incidencia) {
-        return servidorService.list(incidencia);
+    public List<ServidorDto> list(@RequestParam(required = false) Boolean disponible) {
+        return servidorService.list(disponible);
     }
 
     /**

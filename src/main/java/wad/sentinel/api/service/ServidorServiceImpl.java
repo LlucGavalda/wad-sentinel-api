@@ -23,17 +23,15 @@ public class ServidorServiceImpl implements ServidorService {
 	private ServidorRepository entityRepository;
 
 	@Override
-	public List<ServidorDto> list(String incidencia) {
+	public List<ServidorDto> list(Boolean disponible) {
 		logger.info("[Start] list...");
 		List<Servidor> servidors = entityRepository.findAll();
 
-		// Filtrar per incidencia si no és null
-		if (incidencia != null) {
-			logger.debug("Filtrando por incidencia: {}", incidencia);
+		// Filtrar per disponible si no és null
+		if (disponible != null) {
 			servidors = servidors.stream()
 					.filter(servidor -> {
-						logger.debug("Servidor incidencia: {}", servidor.getIncidencia());
-						return incidencia.equalsIgnoreCase(servidor.getIncidencia());
+						return String.valueOf(disponible).equalsIgnoreCase(String.valueOf(servidor.getDisponible()));
 					})
 					.collect(Collectors.toList());
 		}

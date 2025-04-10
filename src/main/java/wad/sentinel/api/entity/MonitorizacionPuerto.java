@@ -21,8 +21,8 @@ public class MonitorizacionPuerto {
     @Column(name = "puerto", length = 10, nullable = false)
     private String puerto;
 
-    @Column(name = "activo", length = 1, nullable = false)
-    private String activo = "S";
+    @Column(name = "activo", nullable = false)
+    private Boolean activo = true;
 
     // Constructors -----------------------------
 
@@ -66,11 +66,11 @@ public class MonitorizacionPuerto {
         this.puerto = puerto;
     }
 
-    public String getActivo() {
+    public Boolean getActivo() {
         return activo;
     }
 
-    public void setActivo(String activo) {
+    public void setActivo(Boolean activo) {
         this.activo = activo;
     }
 

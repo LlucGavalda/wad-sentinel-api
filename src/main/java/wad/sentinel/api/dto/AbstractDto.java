@@ -23,7 +23,7 @@ public abstract class AbstractDto {
 	// Timestamp of the modification
 	@JsonFormat(pattern = Constants.JSON_FORMAT_DATETIME, timezone = Constants.JSON_FORMAT_DATETIME_TIMEZONE)
 	private Timestamp fechaAud;
-	private String incidencia;
+	private Boolean disponible;
 
 	// Constructors -----------------------------
 
@@ -44,7 +44,7 @@ public abstract class AbstractDto {
 	 */
 	public AbstractDto(AbstractEntity entity) {
 		mapSystemFields(entity);
-		this.incidencia = entity.getIncidencia();
+		this.disponible = entity.getDisponible();
 		this.usuarioAud = entity.getUsuarioAud();
 
 	}
@@ -58,19 +58,19 @@ public abstract class AbstractDto {
 	 *               FechaAud will be initialised.
 	 */
 	public void mapSystemFields(AbstractEntity entity) {
-		this.setIncidencia(entity.getIncidencia());
+		this.setDisponible(entity.getDisponible());
 		this.setUsuarioAud(entity.getUsuarioAud());
 		this.setFechaAud(entity.getFechaAud());
 	}
 
 	// Getters and Setters -----------------------------
 
-	public String getIncidencia() {
-		return incidencia;
+	public Boolean getDisponible() {
+		return disponible;
 	}
 
-	public void setIncidencia(String incidencia) {
-		this.incidencia = incidencia;
+	public void setDisponible(Boolean disponible) {
+		this.disponible = disponible;
 	}
 
 	public String getUsuarioAud() {
@@ -90,4 +90,5 @@ public abstract class AbstractDto {
 	}
 
 	public abstract AbstractEntity mapEntity();
+
 }
