@@ -25,16 +25,8 @@ public class ServidorServiceImpl implements ServidorService {
 	@Override
 	public List<ServidorDto> list(Boolean disponible) {
 		logger.info("[Start] list...");
-		List<Servidor> servidors = entityRepository.findAll();
 
-		// Filtrar per disponible si no és null
-		if (disponible != null) {
-			servidors = servidors.stream()
-					.filter(servidor -> {
-						return String.valueOf(disponible).equalsIgnoreCase(String.valueOf(servidor.getDisponible()));
-					})
-					.collect(Collectors.toList());
-		}
+		List<Servidor> servidors = entityRepository.list(disponible);
 
 		// Convertim la llista d'entitats a una llista de DTOs utilitzant el mètode
 		// mapDto() de la classe Servidor

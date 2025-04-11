@@ -36,11 +36,15 @@ public class MonitorizacionServiceImpl implements MonitorizacionService {
 	private MonitorizacionProcesadorRepository procesadorRepository;
 
 	@Override
-	public List<MonitorizacionDto> list(Boolean disponible, Boolean incidencia, Timestamp fechaDesde,
-			Timestamp fechaHasta, Long idServidor) {
+	public List<MonitorizacionDto> list(Boolean disponible, Boolean incidencia,
+			String fechaDesde, String fechaHasta, Long idServidor) {
 		logger.info("[Start] list...");
-		List<Monitorizacion> monitorizaciones = entityRepository.list(disponible, incidencia, fechaDesde, fechaHasta,
-				idServidor);
+
+		Timestamp fechaDesdeTimestamp = parseFecha(fechaDesde);
+		Timestamp fechaHastaTimestamp = parseFecha(fechaHasta);
+
+		List<Monitorizacion> monitorizaciones = entityRepository.list(disponible, incidencia, fechaDesdeTimestamp,
+				fechaHastaTimestamp, idServidor);
 
 		// Convertim la llista d'entitats a una llista de DTOs utilitzant el mètode
 		// mapDto() de la classe Monitorizacion
@@ -88,5 +92,27 @@ public class MonitorizacionServiceImpl implements MonitorizacionService {
 
 		logger.info("[End] create.");
 		return savedEntity.mapDto();
+	}
+
+	private Timestamp parseFecha(String fecha) {
+		if (fecha == null || fecha.isEmpty()) {
+			return null;
+		}
+
+		try {
+			if (fecha.matches("\\d{4}")) { // Formato: "2025"
+				return Timestamp.valueOf(fecha + "-01-01 00:00:00");
+			} else if (fecha.matches("\\d{4}-\\d{2}")) { // Formato: "2025-04"
+				return Timestamp.valueOf(fecha + "-01 00:00:00");
+			} else if (fecha.matches("\\d{4}-\\d{2}-\\d{2}")) { // Formato: "2025-04-11"
+				return Timestamp.valueOf(fecha + " 00:00:00");
+			} else if (fecha.matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}")) { // Formato: "2025-04-11 14:30"
+				return Timestamp.valueOf(fecha + ":00");
+			} else {
+				throw new IllegalArgumentException("Formato de fecha no válido: " + fecha);
+			}
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Error al parsear la fecha: " + fecha, e);
+		}
 	}
 }
