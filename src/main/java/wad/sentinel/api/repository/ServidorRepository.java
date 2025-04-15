@@ -18,7 +18,6 @@ public interface ServidorRepository extends JpaRepository<Servidor, Long>, JpaSp
 	List<Servidor> list(
 			@Param("disponible") Boolean disponible);
 
-	@SuppressWarnings("null")
 	@Query(value = "SELECT t FROM Servidor t "
 			+ "WHERE t.id = :id ")
 	Optional<Servidor> findById(@Param("id") Long id);

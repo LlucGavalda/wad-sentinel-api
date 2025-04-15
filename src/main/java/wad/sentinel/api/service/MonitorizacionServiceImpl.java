@@ -1,25 +1,29 @@
 package wad.sentinel.api.service;
 
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityManager;
 import wad.sentinel.api.dto.MonitorizacionDto;
+import wad.sentinel.api.dto.MonitorizacionPage;
 import wad.sentinel.api.entity.Monitorizacion;
-import wad.sentinel.api.exceptions.J3NotFoundException;
+import wad.sentinel.api.exceptions.NotFoundException;
 import wad.sentinel.api.repository.MonitorizacionMemoriaRepository;
 import wad.sentinel.api.repository.MonitorizacionProcesadorRepository;
 import wad.sentinel.api.repository.MonitorizacionRepository;
 import wad.sentinel.api.repository.ServidorRepository;
+import wad.sentinel.api.utils.NativeQueryHelper;
+import wad.sentinel.api.utils.dto.SearchCriteriaDto;
 
 @Service
-public class MonitorizacionServiceImpl implements MonitorizacionService {
+public class MonitorizacionServiceImpl extends AbstractService implements MonitorizacionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MonitorizacionServiceImpl.class);
 
@@ -35,26 +39,40 @@ public class MonitorizacionServiceImpl implements MonitorizacionService {
 	@Autowired
 	private MonitorizacionProcesadorRepository procesadorRepository;
 
+	@Autowired
+	private EntityManager entityManager;
+
 	@Override
-	public List<MonitorizacionDto> list(Boolean disponible, Boolean incidencia,
-			String fechaDesde, String fechaHasta, Long idServidor) {
+	@SuppressWarnings("unchecked") // Avoid warning in cast of query.getResultList()
+	public MonitorizacionPage list(Integer pageNumber, Integer pageSize, SearchCriteriaDto[] searchCriteria) {
+
 		logger.info("[Start] list...");
 
-		Timestamp fechaDesdeTimestamp = parseFecha(fechaDesde);
-		Timestamp fechaHastaTimestamp = parseFecha(fechaHasta);
+		Pageable pageable = preparePageable(pageNumber, pageSize);
 
-		List<Monitorizacion> monitorizaciones = entityRepository.list(disponible, incidencia, fechaDesdeTimestamp,
-				fechaHastaTimestamp, idServidor);
+		NativeQueryHelper queryHelper = new NativeQueryHelper(Monitorizacion.class, 1);
+		queryHelper.setSearchCriteria(addFilterValid(searchCriteria));
 
-		// Convertim la llista d'entitats a una llista de DTOs utilitzant el mètode
-		// mapDto() de la classe Monitorizacion
-		List<MonitorizacionDto> monitorizacionDto = monitorizaciones.stream()
-				.map(Monitorizacion::mapDto) // Utilitzem el mètode mapDto() de Monitorizacion per convertir l'entitat
-												// en DTO
-				.collect(Collectors.toList());
+		PageImpl<Monitorizacion> page = (PageImpl<Monitorizacion>) queryHelper.getQueryResultPage(entityManager,
+				pageable);
 
 		logger.info("[End] list.");
-		return monitorizacionDto;
+		return new MonitorizacionPage(page);
+
+		// Timestamp fechaDesdeTimestamp = parseFecha(fechaDesde);
+		// Timestamp fechaHastaTimestamp = parseFecha(fechaHasta);
+
+		// List<Monitorizacion> monitorizaciones = entityRepository.list(disponible,
+		// incidencia, fechaDesdeTimestamp,
+		// fechaHastaTimestamp, idServidor);
+
+		// // Convertim la llista d'entitats a una llista de DTOs utilitzant el mètode
+		// // mapDto() de la classe Monitorizacion
+		// List<MonitorizacionDto> monitorizacionDto = monitorizaciones.stream()
+		// .map(Monitorizacion::mapDto) // Utilitzem el mètode mapDto() de
+		// Monitorizacion per convertir l'entitat
+		// // en DTO
+		// .collect(Collectors.toList());
 	}
 
 	@Override
@@ -63,7 +81,7 @@ public class MonitorizacionServiceImpl implements MonitorizacionService {
 
 		Optional<Monitorizacion> existing = entityRepository.findById(id);
 		if (!existing.isPresent()) {
-			throw new J3NotFoundException("Monitorizacion", "id", String.valueOf(id));
+			throw new NotFoundException("Monitorizacion", "id", String.valueOf(id));
 		}
 
 		logger.info("[End] get.");

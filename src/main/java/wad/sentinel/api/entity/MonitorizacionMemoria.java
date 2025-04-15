@@ -15,7 +15,7 @@ public class MonitorizacionMemoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_monitorizacion_memoria")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "total", length = 45, nullable = false)

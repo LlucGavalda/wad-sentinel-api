@@ -15,7 +15,7 @@ public class MonitorizacionProcesador {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_monitorizacion_procesador")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "usado", length = 45, nullable = false)

@@ -15,7 +15,7 @@ public class MonitorizacionTemperatura {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_monitorizacion_temperatura")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "sensor", length = 45, nullable = false)

@@ -15,7 +15,7 @@ public class MonitorizacionPuerto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_monitorizacion_puerto")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "puerto", length = 10, nullable = false)

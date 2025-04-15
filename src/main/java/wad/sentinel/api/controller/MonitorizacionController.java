@@ -1,8 +1,5 @@
 package wad.sentinel.api.controller;
 
-import java.sql.Timestamp;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import wad.sentinel.api.dto.MonitorizacionDto;
+import wad.sentinel.api.dto.MonitorizacionPage;
 import wad.sentinel.api.service.MonitorizacionService;
+import wad.sentinel.api.utils.dto.SearchCriteriaDto;
 
 @RestController
 @RequestMapping("/wadsentinel/api/monitorizaciones")
@@ -29,14 +28,20 @@ public class MonitorizacionController {
      * 
      * @return
      */
-    @GetMapping("/list")
-    public List<MonitorizacionDto> list(
-            @RequestParam(required = false) Boolean disponible,
-            @RequestParam(required = false) Boolean incidencia,
-            @RequestParam(required = false) String fechaDesde,
-            @RequestParam(required = false) String fechaHasta,
-            @RequestParam(required = false) Long idServidor) {
-        return monitorizacionService.list(disponible, incidencia, fechaDesde, fechaHasta, idServidor);
+    @GetMapping("/paged")
+    public MonitorizacionPage list(
+            @RequestParam(defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(defaultValue = "1", required = false) Integer pageSize,
+            @RequestBody(required = false) SearchCriteriaDto[] dto) {
+        return monitorizacionService.list(pageNumber, pageSize, dto);
+    }
+
+    @PostMapping("/search")
+    public MonitorizacionPage search(
+            @RequestParam(defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(defaultValue = "1", required = false) Integer pageSize,
+            @RequestBody(required = false) SearchCriteriaDto[] dto) {
+        return monitorizacionService.list(pageNumber, pageSize, dto);
     }
 
     /**

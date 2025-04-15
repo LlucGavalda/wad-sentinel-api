@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import wad.sentinel.api.dto.ServidorDto;
 import wad.sentinel.api.entity.Servidor;
-import wad.sentinel.api.exceptions.J3NotFoundException;
+import wad.sentinel.api.exceptions.NotFoundException;
 import wad.sentinel.api.repository.ServidorRepository;
 
 @Service
@@ -44,7 +44,7 @@ public class ServidorServiceImpl implements ServidorService {
 
 		Optional<Servidor> existing = entityRepository.findById(id);
 		if (!existing.isPresent()) {
-			throw new J3NotFoundException("Servidor", "id", String.valueOf(id));
+			throw new NotFoundException("Servidor", "id", String.valueOf(id));
 		}
 
 		logger.info("[End] get.");
@@ -71,7 +71,7 @@ public class ServidorServiceImpl implements ServidorService {
 		logger.info("[Start] modify...");
 
 		Servidor entity = entityRepository.findById(dto.getId())
-				.orElseThrow(() -> new J3NotFoundException("Servidor", "id", String.valueOf(dto.getId())));
+				.orElseThrow(() -> new NotFoundException("Servidor", "id", String.valueOf(dto.getId())));
 
 		// Actualizar entidad con datos del DTO
 		entity.updateFrom(dto);

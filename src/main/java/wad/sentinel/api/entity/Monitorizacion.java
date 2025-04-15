@@ -2,16 +2,16 @@ package wad.sentinel.api.entity;
 
 import java.sql.Timestamp;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.google.common.collect.ImmutableMap;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
@@ -19,6 +19,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import wad.sentinel.api.dto.MonitorizacionDto;
+import wad.sentinel.api.utils.SearchSpecification;
 
 @Entity
 @Table(name = "ws_monitorizaciones")
@@ -26,11 +27,6 @@ import wad.sentinel.api.dto.MonitorizacionDto;
 public class Monitorizacion extends AbstractEntity {
 
 	private static final long serialVersionUID = 1132811703611564522L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_monitorizacion")
-	protected Long id;
 
 	@ManyToOne
 	@JoinColumn(name = "id_servidor_fk", nullable = false)
@@ -61,6 +57,14 @@ public class Monitorizacion extends AbstractEntity {
 	@JoinTable(name = "ws_servidores_monitorizaciones_temperatura", joinColumns = @JoinColumn(name = "id_monitorizacion"), inverseJoinColumns = @JoinColumn(name = "id_monitorizacion_temperatura"))
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	private Set<MonitorizacionTemperatura> temperaturas = Collections.<MonitorizacionTemperatura>emptySet();
+
+	public static final Map<String, SearchSpecification.SearchType> SEARCHABLE_FIELDS = ImmutableMap.<String, SearchSpecification.SearchType>builder()
+			.put("disponible", SearchSpecification.SearchType.BOOLEAN)
+			.put("servidor.id", SearchSpecification.SearchType.NUMBER)
+			.put("id", SearchSpecification.SearchType.NUMBER)
+			.put("incidencia", SearchSpecification.SearchType.BOOLEAN)
+			.put("fecha", SearchSpecification.SearchType.DATE_TIME)
+			.build();
 
 	// Constructors -----------------------------
 
@@ -105,14 +109,6 @@ public class Monitorizacion extends AbstractEntity {
 	}
 
 	// Getters and Setters -----------------------------
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Servidor getServidor() {
 		return servidor;

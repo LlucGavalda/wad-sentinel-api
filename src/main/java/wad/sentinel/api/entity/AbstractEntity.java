@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import wad.sentinel.api.dto.AbstractDto;
 import wad.sentinel.authentication.utils.SecurityUtils;
@@ -20,6 +23,11 @@ import wad.sentinel.authentication.utils.SecurityUtils;
 public abstract class AbstractEntity implements Serializable {
 
 	private static final long serialVersionUID = 8658231246277532919L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	protected Long id;
 
 	// Registry is valid or, otherwise, deleted/invalidated.
 	@Column(name = "disponible", nullable = false)
@@ -62,6 +70,7 @@ public abstract class AbstractEntity implements Serializable {
 	 *            will be initialisec.
 	 */
 	public void mapSystemFields(AbstractDto dto) {
+		this.setId(dto.getId());
 		this.setDisponible(dto.getDisponible());
 		this.setUsuarioAud(dto.getUsuarioAud());
 		this.setFechaAud(dto.getFechaAud());
@@ -105,6 +114,14 @@ public abstract class AbstractEntity implements Serializable {
 	public abstract AbstractDto mapDto();
 
 	// Getters and Setters -----------------------------
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public Boolean getDisponible() {
 		return disponible;

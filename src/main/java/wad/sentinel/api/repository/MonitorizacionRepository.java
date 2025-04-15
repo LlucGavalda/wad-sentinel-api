@@ -27,7 +27,6 @@ public interface MonitorizacionRepository
 			@Param("fechaHasta") Timestamp fechaHasta,
 			@Param("idServidor") Long idServidor);
 
-	@SuppressWarnings("null")
 	@Query(value = "SELECT t FROM Monitorizacion t "
 			+ "WHERE t.id = :id ")
 	Optional<Monitorizacion> findById(@Param("id") Long id);

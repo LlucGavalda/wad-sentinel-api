@@ -20,8 +20,8 @@ public class Servidor extends AbstractEntity {
 	// DB Id
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_servidor")
-	protected Long id;
+	@Column(name = "id")
+	private Long id;
 	@Column(name = "servidor", length = 50, nullable = false)
 	private String servidor;
 	@Column(name = "host", length = 50, nullable = false)
@@ -53,14 +53,6 @@ public class Servidor extends AbstractEntity {
 	}
 
 	// Getters and Setters -----------------------------
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getServidor() {
 		return servidor;

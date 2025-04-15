@@ -2,7 +2,7 @@ package wad.sentinel.api.exceptions;
 
 import wad.sentinel.api.error.ErrorConstants;
 
-public class J3NotFoundException extends AbstractJ3Exception {
+public class NotFoundException extends AbstractException {
 
 	private static final long serialVersionUID = 7948831832861112481L;
 
@@ -13,7 +13,7 @@ public class J3NotFoundException extends AbstractJ3Exception {
 	 * @param field
 	 * @param value
 	 */
-	public J3NotFoundException(String entity, String field, String value) {
+	public NotFoundException(String entity, String field, String value) {
 		super(ErrorConstants.ERROR_NOT_FOUND,
 				new String[] { entity + "." + field, value },
 				String.format("%s not found with %s: %s", entity, field, value));
@@ -25,7 +25,7 @@ public class J3NotFoundException extends AbstractJ3Exception {
 	 * @param entity
 	 * @param field
 	 */
-	public J3NotFoundException(String entity, String field) {
+	public NotFoundException(String entity, String field) {
 		super(ErrorConstants.ERROR_NOT_FOUND,
 				new String[] { entity, field },
 				String.format("Field %s not found in entity %s", field, entity));

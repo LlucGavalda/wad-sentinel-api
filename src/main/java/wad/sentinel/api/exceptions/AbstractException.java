@@ -1,9 +1,9 @@
 package wad.sentinel.api.exceptions;
 
 /**
- * Abstract class for all J3Exceptions common elements
+ * Abstract class for all Exceptions common elements
  */
-public abstract class AbstractJ3Exception extends RuntimeException {
+public abstract class AbstractException extends RuntimeException {
 
 	private static final long serialVersionUID = -7479889156146341850L;
 
@@ -16,7 +16,7 @@ public abstract class AbstractJ3Exception extends RuntimeException {
 	 * @param errorCode
 	 * @param message
 	 */
-	protected AbstractJ3Exception(int errorCode, String message) {
+	protected AbstractException(int errorCode, String message) {
 		super(message);
 		this.errorCode = errorCode;
 	}
@@ -28,7 +28,7 @@ public abstract class AbstractJ3Exception extends RuntimeException {
 	 * @param params
 	 * @param message
 	 */
-	protected AbstractJ3Exception(int errorCode, String[] params, String message) {
+	protected AbstractException(int errorCode, String[] params, String message) {
 		super(message);
 		this.errorCode = errorCode;
 		this.parameters = params;

@@ -8,4 +8,6 @@ public abstract class Constants {
     public static final String JSON_FORMAT_DATETIME_TIMEZONE = "Europe/Madrid";
     public static final String PATTERN_TIMESTAMP_RETURNED_ERRORS = "yyyy-MM-dd HH:mm:ss";
 
+    public static final Integer MIN_LENGTH_SEARCH_VALUE = 1;
+
 }

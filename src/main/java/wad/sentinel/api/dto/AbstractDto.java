@@ -18,6 +18,8 @@ import wad.sentinel.api.Constants;
  */
 public abstract class AbstractDto {
 
+	// Registry internal id
+	private Long id;
 	// User that has made a modification
 	private String usuarioAud;
 	// Timestamp of the modification
@@ -44,8 +46,6 @@ public abstract class AbstractDto {
 	 */
 	public AbstractDto(AbstractEntity entity) {
 		mapSystemFields(entity);
-		this.disponible = entity.getDisponible();
-		this.usuarioAud = entity.getUsuarioAud();
 
 	}
 
@@ -58,12 +58,21 @@ public abstract class AbstractDto {
 	 *               FechaAud will be initialised.
 	 */
 	public void mapSystemFields(AbstractEntity entity) {
+		this.setId(entity.getId());
 		this.setDisponible(entity.getDisponible());
 		this.setUsuarioAud(entity.getUsuarioAud());
 		this.setFechaAud(entity.getFechaAud());
 	}
 
 	// Getters and Setters -----------------------------
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public Boolean getDisponible() {
 		return disponible;
