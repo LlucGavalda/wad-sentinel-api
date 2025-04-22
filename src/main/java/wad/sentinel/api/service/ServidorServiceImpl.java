@@ -33,12 +33,16 @@ public class ServidorServiceImpl extends AbstractService implements ServidorServ
 	@SuppressWarnings("unchecked") // Avoid warning in cast of query.getResultList()
 	public List<ServidorDto> list(SearchCriteriaDto[] searchCriteria) {
 		logger.info("[Start] list...");
-
+		if (searchCriteria == null) {
+			searchCriteria = new SearchCriteriaDto[0];
+		}
 		Pageable pageable = preparePageable(0, -1);
 
 		NativeQueryHelper queryHelper = new NativeQueryHelper(Servidor.class, 1);
-		queryHelper.setSearchCriteria(addFilterValid(searchCriteria));
-
+		queryHelper.setSearchCriteria(searchCriteria);
+		if (searchCriteria.length == 0) {
+			queryHelper.setSearchCriteria(addFilterValid(searchCriteria));
+		}
 		PageImpl<Servidor> page = (PageImpl<Servidor>) queryHelper.getQueryResultPage(entityManager,
 				pageable);
 
@@ -90,5 +94,4 @@ public class ServidorServiceImpl extends AbstractService implements ServidorServ
 		logger.info("[End] modify.");
 		return updated.mapDto();
 	}
-
 }
