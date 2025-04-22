@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import wad.sentinel.api.dto.ServidorDto;
+import wad.sentinel.api.dto.ServidorPage;
 import wad.sentinel.api.service.ServidorService;
+import wad.sentinel.api.utils.dto.SearchCriteriaDto;
 
 @RestController
 @RequestMapping("/wadsentinel/api/servidors")
@@ -30,8 +31,8 @@ public class ServidorController {
      * @return
      */
     @GetMapping("/list")
-    public List<ServidorDto> list(@RequestParam(required = false) Boolean disponible) {
-        return servidorService.list(disponible);
+    public List<ServidorDto> list(@RequestBody(required = false) SearchCriteriaDto[] dto) {
+        return servidorService.list(dto);
     }
 
     /**
@@ -73,4 +74,10 @@ public class ServidorController {
         servidorDto.setId(id);
         return ResponseEntity.status(HttpStatus.OK).body(servidorService.modify(servidorDto));
     }
+
+    @PostMapping("/search")
+    public List<ServidorDto> search(@RequestBody(required = false) SearchCriteriaDto[] dto) {
+        return servidorService.list(dto);
+    }
+
 }

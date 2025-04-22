@@ -1,6 +1,5 @@
 package wad.sentinel.api.service;
 
-import java.sql.Timestamp;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -58,21 +57,6 @@ public class MonitorizacionServiceImpl extends AbstractService implements Monito
 
 		logger.info("[End] list.");
 		return new MonitorizacionPage(page);
-
-		// Timestamp fechaDesdeTimestamp = parseFecha(fechaDesde);
-		// Timestamp fechaHastaTimestamp = parseFecha(fechaHasta);
-
-		// List<Monitorizacion> monitorizaciones = entityRepository.list(disponible,
-		// incidencia, fechaDesdeTimestamp,
-		// fechaHastaTimestamp, idServidor);
-
-		// // Convertim la llista d'entitats a una llista de DTOs utilitzant el mètode
-		// // mapDto() de la classe Monitorizacion
-		// List<MonitorizacionDto> monitorizacionDto = monitorizaciones.stream()
-		// .map(Monitorizacion::mapDto) // Utilitzem el mètode mapDto() de
-		// Monitorizacion per convertir l'entitat
-		// // en DTO
-		// .collect(Collectors.toList());
 	}
 
 	@Override
@@ -112,25 +96,4 @@ public class MonitorizacionServiceImpl extends AbstractService implements Monito
 		return savedEntity.mapDto();
 	}
 
-	private Timestamp parseFecha(String fecha) {
-		if (fecha == null || fecha.isEmpty()) {
-			return null;
-		}
-
-		try {
-			if (fecha.matches("\\d{4}")) { // Formato: "2025"
-				return Timestamp.valueOf(fecha + "-01-01 00:00:00");
-			} else if (fecha.matches("\\d{4}-\\d{2}")) { // Formato: "2025-04"
-				return Timestamp.valueOf(fecha + "-01 00:00:00");
-			} else if (fecha.matches("\\d{4}-\\d{2}-\\d{2}")) { // Formato: "2025-04-11"
-				return Timestamp.valueOf(fecha + " 00:00:00");
-			} else if (fecha.matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}")) { // Formato: "2025-04-11 14:30"
-				return Timestamp.valueOf(fecha + ":00");
-			} else {
-				throw new IllegalArgumentException("Formato de fecha no válido: " + fecha);
-			}
-		} catch (Exception e) {
-			throw new IllegalArgumentException("Error al parsear la fecha: " + fecha, e);
-		}
-	}
 }

@@ -2,40 +2,48 @@ package wad.sentinel.api.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityManager;
 import wad.sentinel.api.dto.ServidorDto;
 import wad.sentinel.api.entity.Servidor;
 import wad.sentinel.api.exceptions.NotFoundException;
 import wad.sentinel.api.repository.ServidorRepository;
+import wad.sentinel.api.utils.NativeQueryHelper;
+import wad.sentinel.api.utils.dto.SearchCriteriaDto;
 
 @Service
-public class ServidorServiceImpl implements ServidorService {
+public class ServidorServiceImpl extends AbstractService implements ServidorService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ServidorServiceImpl.class);
 
 	@Autowired
 	private ServidorRepository entityRepository;
 
+	@Autowired
+	private EntityManager entityManager;
+
 	@Override
-	public List<ServidorDto> list(Boolean disponible) {
+	@SuppressWarnings("unchecked") // Avoid warning in cast of query.getResultList()
+	public List<ServidorDto> list(SearchCriteriaDto[] searchCriteria) {
 		logger.info("[Start] list...");
 
-		List<Servidor> servidors = entityRepository.list(disponible);
+		Pageable pageable = preparePageable(0, -1);
 
-		// Convertim la llista d'entitats a una llista de DTOs utilitzant el mètode
-		// mapDto() de la classe Servidor
-		List<ServidorDto> servidorDto = servidors.stream()
-				.map(Servidor::mapDto) // Utilitzem el mètode mapDto() de Servidor per convertir l'entitat en DTO
-				.collect(Collectors.toList());
+		NativeQueryHelper queryHelper = new NativeQueryHelper(Servidor.class, 1);
+		queryHelper.setSearchCriteria(addFilterValid(searchCriteria));
+
+		PageImpl<Servidor> page = (PageImpl<Servidor>) queryHelper.getQueryResultPage(entityManager,
+				pageable);
 
 		logger.info("[End] list.");
-		return servidorDto;
+		return page.getContent().stream().map(Servidor::mapDto).toList();
 	}
 
 	@Override

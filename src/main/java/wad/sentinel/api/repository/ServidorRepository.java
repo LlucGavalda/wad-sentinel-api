@@ -14,9 +14,13 @@ public interface ServidorRepository extends JpaRepository<Servidor, Long>, JpaSp
 
 	@Query(value = "SELECT t FROM Servidor t "
 			+ "WHERE (:disponible IS NULL OR t.disponible = :disponible) "
+			+ "AND (:host IS NULL OR t.host = :host) "
+			+ "AND (:servidor IS NULL OR t.servidor = :servidor) "
 			+ "ORDER BY t.id ASC")
 	List<Servidor> list(
-			@Param("disponible") Boolean disponible);
+			@Param("disponible") Boolean disponible,
+			@Param("host") String host,
+			@Param("servidor") String servidor);
 
 	@Query(value = "SELECT t FROM Servidor t "
 			+ "WHERE t.id = :id ")

@@ -64,6 +64,8 @@ public class Monitorizacion extends AbstractEntity {
 			.put("id", SearchSpecification.SearchType.NUMBER)
 			.put("incidencia", SearchSpecification.SearchType.BOOLEAN)
 			.put("fecha", SearchSpecification.SearchType.DATE_TIME)
+			.put("usuarioAud", SearchSpecification.SearchType.STRING)
+
 			.build();
 
 	// Constructors -----------------------------

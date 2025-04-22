@@ -1,12 +1,14 @@
 package wad.sentinel.api.entity;
 
+import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 import wad.sentinel.api.dto.ServidorDto;
-import jakarta.persistence.Id;
+import wad.sentinel.api.utils.SearchSpecification;
 
 @Entity
 @Table(name = "ws_servidores")
@@ -17,15 +19,18 @@ public class Servidor extends AbstractEntity {
 
 	public static final String cacheName = "ServidorCache";
 
-	// DB Id
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
 	@Column(name = "servidor", length = 50, nullable = false)
 	private String servidor;
 	@Column(name = "host", length = 50, nullable = false)
 	private String host;
+
+	public static final Map<String, SearchSpecification.SearchType> SEARCHABLE_FIELDS = ImmutableMap.<String, SearchSpecification.SearchType>builder()
+			.put("disponible", SearchSpecification.SearchType.BOOLEAN)
+			.put("servidor", SearchSpecification.SearchType.STRING)
+			.put("host", SearchSpecification.SearchType.STRING)
+			.put("id", SearchSpecification.SearchType.NUMBER)
+
+			.build();
 
 	// Constructors -----------------------------
 
@@ -35,7 +40,6 @@ public class Servidor extends AbstractEntity {
 
 	public Servidor(ServidorDto dto) {
 		updateFrom(dto);
-		this.id = dto.getId();
 		this.servidor = dto.getServidor();
 		this.host = dto.getHost();
 	}
