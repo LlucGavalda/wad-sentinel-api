@@ -1,5 +1,8 @@
 package wad.sentinel.api.service;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 import jakarta.persistence.EntityManager;
 import wad.sentinel.api.dto.MonitorizacionDto;
 import wad.sentinel.api.dto.MonitorizacionPage;
+import wad.sentinel.api.dto.ServidorDto;
 import wad.sentinel.api.entity.Monitorizacion;
 import wad.sentinel.api.exceptions.NotFoundException;
 import wad.sentinel.api.repository.MonitorizacionMemoriaRepository;
@@ -41,6 +45,9 @@ public class MonitorizacionServiceImpl extends AbstractService implements Monito
 	@Autowired
 	private EntityManager entityManager;
 
+	@Autowired
+	private ServidorService servidorService;
+
 	@Override
 	@SuppressWarnings("unchecked") // Avoid warning in cast of query.getResultList()
 	public MonitorizacionPage list(Integer pageNumber, Integer pageSize, SearchCriteriaDto[] searchCriteria) {
@@ -57,6 +64,25 @@ public class MonitorizacionServiceImpl extends AbstractService implements Monito
 
 		logger.info("[End] list.");
 		return new MonitorizacionPage(page);
+	}
+
+	@Override
+	public List<Monitorizacion> last() {
+		logger.info("[Start] last...");
+
+		List<Monitorizacion> monitorizacions = new ArrayList<Monitorizacion>();
+
+		List<ServidorDto> servidors = servidorService.list(null);
+
+		for (int i = 0; i < servidors.size(); i++) {
+			Monitorizacion monitorizacion = entityRepository.last(servidors.get(i).getId());
+			if (monitorizacion != null) {
+				monitorizacions.add(monitorizacion);
+			}
+		}
+
+		logger.info("[End] last.");
+		return monitorizacions;
 	}
 
 	@Override
@@ -88,6 +114,8 @@ public class MonitorizacionServiceImpl extends AbstractService implements Monito
 
 		// Preparar la entidad principal
 		entity.prepareToSave();
+		entity.setFecha(new Timestamp(System.currentTimeMillis()));
+
 		entity.setMemoria(memoriaRepository.save(entity.getMemoria()));
 		entity.setProcesador(procesadorRepository.save(entity.getProcesador()));
 		Monitorizacion savedEntity = entityRepository.save(entity);
@@ -95,5 +123,4 @@ public class MonitorizacionServiceImpl extends AbstractService implements Monito
 		logger.info("[End] create.");
 		return savedEntity.mapDto();
 	}
-
 }

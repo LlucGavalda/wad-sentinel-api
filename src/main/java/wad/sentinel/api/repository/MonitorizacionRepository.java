@@ -31,4 +31,12 @@ public interface MonitorizacionRepository
 			+ "WHERE t.id = :id ")
 	Optional<Monitorizacion> findById(@Param("id") Long id);
 
+	@Query(value = "SELECT t FROM Monitorizacion t "
+			+ "WHERE t.disponible "
+			+ "AND t.servidor.id = :idServidor "
+			+ "ORDER BY t.fecha DESC "
+			+ "LIMIT 1")
+	Monitorizacion last(
+			@Param("idServidor") Long idServidor);
+
 }

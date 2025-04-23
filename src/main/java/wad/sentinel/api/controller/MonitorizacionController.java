@@ -1,5 +1,7 @@
 package wad.sentinel.api.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import wad.sentinel.api.dto.MonitorizacionDto;
 import wad.sentinel.api.dto.MonitorizacionPage;
+import wad.sentinel.api.entity.Monitorizacion;
 import wad.sentinel.api.service.MonitorizacionService;
 import wad.sentinel.api.utils.dto.SearchCriteriaDto;
 
@@ -34,6 +37,16 @@ public class MonitorizacionController {
             @RequestParam(defaultValue = "1", required = false) Integer pageSize,
             @RequestBody(required = false) SearchCriteriaDto[] dto) {
         return monitorizacionService.list(pageNumber, pageSize, dto);
+    }
+
+    /**
+     * READ LAST
+     * 
+     * @return
+     */
+    @GetMapping("/last")
+    public List<Monitorizacion> last() {
+        return monitorizacionService.last();
     }
 
     @PostMapping("/search")
