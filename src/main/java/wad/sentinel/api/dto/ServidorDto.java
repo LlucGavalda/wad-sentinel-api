@@ -4,7 +4,6 @@ import wad.sentinel.api.entity.Servidor;
 
 public class ServidorDto extends AbstractDto {
 
-	
 	private Long id;
 	private String servidor;
 	private String host;
@@ -37,7 +36,7 @@ public class ServidorDto extends AbstractDto {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public String getServidor() {
 		return servidor;
 	}

@@ -8,12 +8,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import wad.sentinel.api.Constants;
 import wad.sentinel.api.entity.Monitorizacion;
-import wad.sentinel.api.entity.Servidor;
 
 public class MonitorizacionDto extends AbstractDto {
 
 	private Long id;
-	private Servidor servidor;
+	private ServidorDto servidor;
 	private Boolean incidencia;
 	@JsonFormat(pattern = Constants.JSON_FORMAT_DATETIME, timezone = Constants.JSON_FORMAT_DATETIME_TIMEZONE)
 	private Timestamp fecha;
@@ -33,14 +32,16 @@ public class MonitorizacionDto extends AbstractDto {
 	public MonitorizacionDto(Monitorizacion entity) {
 		super(entity);
 		this.id = entity.getId();
-		this.servidor = entity.getServidor();
+		if (entity.getServidor() != null) {
+			this.servidor = entity.getServidor().mapDto();
+		}
 		this.incidencia = entity.getIncidencia();
 		this.fecha = entity.getFecha();
 		if (entity.getPuertos() != null && !entity.getPuertos().isEmpty()) {
-			this.puertos = entity.getPuertos().stream().map(MonitorizacionPuertoDto::new).collect(Collectors.toSet());
+			this.puertos = entity.getPuertos().stream().map(ent -> ent.mapDto()).collect(Collectors.toSet());
 		}
 		if (entity.getDiscos() != null && !entity.getDiscos().isEmpty()) {
-			this.discos = entity.getDiscos().stream().map(MonitorizacionDiscoDto::new).collect(Collectors.toSet());
+			this.discos = entity.getDiscos().stream().map(ent -> ent.mapDto()).collect(Collectors.toSet());
 		}
 		if (entity.getMemoria() != null) {
 			this.memoria = new MonitorizacionMemoriaDto(entity.getMemoria());
@@ -50,7 +51,8 @@ public class MonitorizacionDto extends AbstractDto {
 		}
 		if (entity.getTemperaturas() != null && !entity.getTemperaturas().isEmpty()) {
 			this.temperaturas = entity.getTemperaturas().stream()
-					.map(MonitorizacionTemperaturaDto::new)
+					.map(ent -> ent
+							.mapDto())
 					.collect(Collectors.toSet());
 		}
 	}
@@ -71,11 +73,11 @@ public class MonitorizacionDto extends AbstractDto {
 		this.id = id;
 	}
 
-	public Servidor getServidor() {
+	public ServidorDto getServidor() {
 		return servidor;
 	}
 
-	public void setServidor(Servidor servidor) {
+	public void setServidor(ServidorDto servidor) {
 		this.servidor = servidor;
 	}
 

@@ -39,11 +39,11 @@ public class Monitorizacion extends AbstractEntity {
 	private Timestamp fecha;
 
 	@JoinTable(name = "ws_servidores_monitorizaciones_puertos", joinColumns = @JoinColumn(name = "id_monitorizacion"), inverseJoinColumns = @JoinColumn(name = "id_monitorizacion_puerto"))
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	private Set<MonitorizacionPuerto> puertos = Collections.<MonitorizacionPuerto>emptySet();
 
 	@JoinTable(name = "ws_servidores_monitorizaciones_discos", joinColumns = @JoinColumn(name = "id_monitorizacion"), inverseJoinColumns = @JoinColumn(name = "id_monitorizacion_disco"))
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	private Set<MonitorizacionDisco> discos = Collections.<MonitorizacionDisco>emptySet();
 
 	@OneToOne
@@ -55,7 +55,7 @@ public class Monitorizacion extends AbstractEntity {
 	private MonitorizacionProcesador procesador;
 
 	@JoinTable(name = "ws_servidores_monitorizaciones_temperatura", joinColumns = @JoinColumn(name = "id_monitorizacion"), inverseJoinColumns = @JoinColumn(name = "id_monitorizacion_temperatura"))
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	private Set<MonitorizacionTemperatura> temperaturas = Collections.<MonitorizacionTemperatura>emptySet();
 
 	public static final Map<String, SearchSpecification.SearchType> SEARCHABLE_FIELDS = ImmutableMap.<String, SearchSpecification.SearchType>builder()
@@ -88,14 +88,16 @@ public class Monitorizacion extends AbstractEntity {
 
 	public void updateFrom(MonitorizacionDto dto) {
 		super.updateFrom(dto);
-		this.servidor = dto.getServidor();
+		if (dto.getServidor() != null) {
+			this.servidor = dto.getServidor().mapEntity();
+		}
 		this.incidencia = dto.getIncidencia();
 		this.fecha = dto.getFecha();
 		if (dto.getPuertos() != null && !dto.getPuertos().isEmpty()) {
-			this.puertos = dto.getPuertos().stream().map(MonitorizacionPuerto::new).collect(Collectors.toSet());
+			this.puertos = dto.getPuertos().stream().map(ent -> ent.mapEntity()).collect(Collectors.toSet());
 		}
 		if (dto.getDiscos() != null && !dto.getDiscos().isEmpty()) {
-			this.discos = dto.getDiscos().stream().map(MonitorizacionDisco::new).collect(Collectors.toSet());
+			this.discos = dto.getDiscos().stream().map(ent -> ent.mapEntity()).collect(Collectors.toSet());
 		}
 		if (dto.getMemoria() != null) {
 			this.memoria = new MonitorizacionMemoria(dto.getMemoria());
@@ -105,7 +107,8 @@ public class Monitorizacion extends AbstractEntity {
 		}
 		if (dto.getTemperaturas() != null && !dto.getTemperaturas().isEmpty()) {
 			this.temperaturas = dto.getTemperaturas().stream()
-					.map(MonitorizacionTemperatura::new)
+					.map(ent -> ent
+							.mapEntity())
 					.collect(Collectors.toSet());
 		}
 	}
