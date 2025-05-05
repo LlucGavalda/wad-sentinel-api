@@ -10,4 +10,6 @@ public abstract class Constants {
 
     public static final Integer MIN_LENGTH_SEARCH_VALUE = 1;
 
+    public static final String PARAMETER_FILE_PATH = "FILE_PATH";
+
 }

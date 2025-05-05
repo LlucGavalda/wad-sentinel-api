@@ -30,6 +30,9 @@ public class MonitorizacionDisco {
     @Column(name = "porcentaje", nullable = false)
     private Double porcentaje;
 
+    // TODO
+    // private boolean incidencia = false;
+
     // Constructors -----------------------------
 
     public MonitorizacionDisco() {
